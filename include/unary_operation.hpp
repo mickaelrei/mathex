@@ -13,7 +13,10 @@ enum class UnaryOperator {
     NEG,
     SIN,
     COS,
+    SEC,
+    CSC,
     TAN,
+    COT,
     LN,
     LOG10,
     EXP,
@@ -31,7 +34,8 @@ public:
 
     virtual float eval(const VariableContext& ctx) const override;
     virtual Expression* clone() const override;
-    
+    virtual Expression* differentiate(const std::string& varName) const override;
+
     // UnaryOperation and Constant
     BinaryOperation operator+(const Constant& c) const;
     BinaryOperation operator-(const Constant& c) const;
@@ -63,7 +67,7 @@ public:
     BinaryOperation operator*(float f) const;
     BinaryOperation operator/(float f) const;
 
-private:
+protected:
     UnaryOperator op;
     Expression* operand;
 };

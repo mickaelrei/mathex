@@ -18,6 +18,18 @@ inline UnaryOperation tan(const Expression& expr) {
     return UnaryOperation(UnaryOperator::TAN, expr.clone());
 }
 
+inline UnaryOperation csc(const Expression& expr) {
+    return UnaryOperation(UnaryOperator::CSC, expr.clone());
+}
+
+inline UnaryOperation sec(const Expression& expr) {
+    return UnaryOperation(UnaryOperator::SEC, expr.clone());
+}
+
+inline UnaryOperation cot(const Expression& expr) {
+    return UnaryOperation(UnaryOperator::COT, expr.clone());
+}
+
 inline UnaryOperation ln(const Expression& expr) {
     return UnaryOperation(UnaryOperator::LN, expr.clone());
 }

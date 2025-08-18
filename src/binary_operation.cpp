@@ -90,6 +90,98 @@ Expression* BinaryOperation::clone() const {
     return new BinaryOperation(*this);
 }
 
+Expression* BinaryOperation::differentiate(const std::string& varName) const {
+    auto du = left->differentiate(varName);
+    auto dv = right->differentiate(varName);
+
+    auto u = left->clone();
+    auto v = right->clone();
+
+    switch (op) {
+    case BinaryOperator::ADD: {
+        // Sum rule: (u + v)' = u' + v'
+        delete u;
+        delete v;
+        return new BinaryOperation(BinaryOperator::ADD, du, dv);
+    }
+
+    case BinaryOperator::SUB: {
+        // Difference rule: (u - v)' = u' - v'
+        delete u;
+        delete v;
+        return new BinaryOperation(BinaryOperator::SUB, du, dv);
+    }
+
+    case BinaryOperator::MUL: {
+        // Product rule: (u * v)' = u'v + uv'
+        return new BinaryOperation(
+            BinaryOperator::ADD,
+            new BinaryOperation(BinaryOperator::MUL, du, v), // u'v
+            new BinaryOperation(BinaryOperator::MUL, u, dv)  // uv'
+        );
+    }
+
+    case BinaryOperator::DIV: {
+        // Quotient rule: (u / v)' = (u'v - uv') / v^2
+        return new BinaryOperation(
+            BinaryOperator::DIV,
+            new BinaryOperation(                                             // u'v - uv'
+                BinaryOperator::SUB,
+                new BinaryOperation(BinaryOperator::MUL, du, v->clone()),    // u'v
+                new BinaryOperation(BinaryOperator::MUL, u, dv)              // uv'
+            ),
+            new BinaryOperation(BinaryOperator::POW, v, new Constant(2.0f))  // v^2
+        );
+    }
+
+    case BinaryOperator::POW: {
+        // Check if the exponent 'v' is a constant
+        if (dynamic_cast<Constant*>(right) != nullptr) {
+            // Simple Power Rule: (u^n)' = n * u^(n-1) * u'
+            delete dv;
+            return new BinaryOperation(
+                BinaryOperator::MUL,
+                du,
+                new BinaryOperation(              // v * u^(v - 1)
+                    BinaryOperator::MUL,
+                    v->clone(),
+                    new BinaryOperation(          // u^(v - 1)
+                       BinaryOperator::POW,
+                        u,
+                        new BinaryOperation(      // v - 1
+                            BinaryOperator::SUB,
+                            v,
+                            new Constant(1.0f)
+                        )
+                    )
+                )
+            );
+        }
+        // General Power rule: (u^v)' = (u^v)(v'ln(u) + vu'/u)
+        return new BinaryOperation(
+            BinaryOperator::MUL,
+            new BinaryOperation(BinaryOperator::POW, u->clone(), v),   // u^v
+            new BinaryOperation(                                       // v'ln(u) + vu'/u
+                BinaryOperator::ADD,
+                new BinaryOperation(                                   // v'ln(u)
+                    BinaryOperator::MUL,
+                    dv,
+                    new UnaryOperation(UnaryOperator::LN, u->clone())  // ln(u)
+                ),
+                new BinaryOperation(                                   // vu'/u
+                    BinaryOperator::MUL,
+                    v->clone(),
+                    new BinaryOperation(BinaryOperator::DIV, du, u)    // u'/u
+                )
+            )
+        );
+    }
+    }
+
+    // Should not be reached
+    return new Constant(0.0f);
+}
+
 // --------------------------
 // --------------------------
 // BinaryOperation and Constant

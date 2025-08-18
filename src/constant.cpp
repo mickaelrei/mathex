@@ -16,6 +16,13 @@ Expression* Constant::clone() const {
     return new Constant(*this);
 }
 
+Expression* Constant::differentiate(const std::string& varName) const {
+    (void)varName;
+
+    // Derivative of a constant is always zero
+    return new Constant(0.0f);
+}
+
 // --------------------------
 // --------------------------
 // Constant and Constant
@@ -38,7 +45,6 @@ Constant Constant::operator/(const Constant& _c) const {
 Constant Constant::operator-() const {
     return Constant(-c);
 }
-
 
 // --------------------------
 // --------------------------

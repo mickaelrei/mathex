@@ -13,7 +13,8 @@ public:
     Constant(float c);
 
     virtual float eval(const VariableContext& ctx) const override;
-    Expression* clone() const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
 
     // Constant and Constant
     Constant operator+(const Constant& c) const;
@@ -46,7 +47,7 @@ public:
     Constant operator*(float f) const;
     Constant operator/(float f) const;
 
-private:
+protected:
     float c;
 };
 

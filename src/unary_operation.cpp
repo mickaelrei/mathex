@@ -45,6 +45,12 @@ float UnaryOperation::eval(const VariableContext& ctx) const {
         return std::cos(v);
     case UnaryOperator::TAN:
         return std::tan(v);
+    case UnaryOperator::SEC:
+        return 1.0f / std::cos(v);
+    case UnaryOperator::CSC:
+        return 1.0f / std::sin(v);
+    case UnaryOperator::COT:
+        return 1.0f / std::tan(v);
     case UnaryOperator::LN:
         return std::log(v);
     case UnaryOperator::LOG10:
@@ -63,6 +69,150 @@ float UnaryOperation::eval(const VariableContext& ctx) const {
 
 Expression* UnaryOperation::clone() const {
     return new UnaryOperation(*this);
+}
+
+Expression* UnaryOperation::differentiate(const std::string& varName) const {
+    auto u = operand->clone();
+    auto du = operand->differentiate(varName);
+
+    switch (op) {
+    case UnaryOperator::NEG: {
+        // Simply negate du
+        delete u;
+        return new UnaryOperation(UnaryOperator::NEG, du);
+    }
+
+    case UnaryOperator::SIN: {
+        // (sin(u))' = u'cos(u)
+        return new BinaryOperation(
+            BinaryOperator::MUL,
+            du,
+            new UnaryOperation(UnaryOperator::COS, u) // cos(u)
+        );
+    }
+
+    case UnaryOperator::COS: {
+        // (cos(u))' = -u'sin(u)
+        return new UnaryOperation(
+            UnaryOperator::NEG,
+            new BinaryOperation(                          // u'sin(u)
+                BinaryOperator::MUL,
+                du,
+                new UnaryOperation(UnaryOperator::SIN, u) // sin(u)
+            )
+        );
+    }
+
+    case UnaryOperator::TAN: {
+        // (tan(u))' = u'(sec(u))^2
+        return new BinaryOperation(
+            BinaryOperator::MUL,
+            du,
+            new BinaryOperation(                           // (sec(u))^2
+                BinaryOperator::POW,
+                new UnaryOperation(UnaryOperator::SEC, u), // sec(u)
+                new Constant(2.0f)
+            )
+        );
+    }
+
+    case UnaryOperator::SEC: {
+        // (sec(u))' = u'tan(u)sec(u)
+        return new BinaryOperation(
+            BinaryOperator::MUL,
+            du,
+            new BinaryOperation(                                    // tan(u)sec(u)
+                BinaryOperator::MUL,
+                new UnaryOperation(UnaryOperator::TAN, u->clone()), // tan(u)
+                new UnaryOperation(UnaryOperator::SEC, u)           // sec(u)
+            )
+        );
+    }
+
+    case UnaryOperator::CSC: {
+        // (csc(u))' = -u'csc(u)cot(u)
+        return new UnaryOperation(
+            UnaryOperator::NEG,
+            new BinaryOperation(                                        // u'csc(u)cot(u)
+                BinaryOperator::MUL,
+                du,
+                new BinaryOperation(                                    // tan(u)sec(u)
+                    BinaryOperator::MUL,
+                    new UnaryOperation(UnaryOperator::CSC, u->clone()), // csc(u)
+                    new UnaryOperation(UnaryOperator::COT, u)           // cot(u)
+                )
+            )
+        );
+    }
+
+    case UnaryOperator::COT: {
+        // (cot(u))' = -u'(csc(u))^2
+        return new UnaryOperation(
+            UnaryOperator::NEG,
+            new BinaryOperation(                               // u'(csc(u))^2
+                BinaryOperator::MUL,
+                du,
+                new BinaryOperation(                           // (csc(u))^2
+                    BinaryOperator::POW,
+                    new UnaryOperation(UnaryOperator::CSC, u), // csc(u)
+                    new Constant(2.0f)
+                )
+            )
+        );
+    }
+
+    case UnaryOperator::LN: {
+        // (ln(u))' = u'/u
+        return new BinaryOperation(BinaryOperator::DIV, du, u);
+    }
+
+    case UnaryOperator::LOG10: {
+        // (log10(u))' = u' / (ln(10) * u)
+        return new BinaryOperation(
+            BinaryOperator::DIV,
+            du,
+            new BinaryOperation(                // ln(10) * u
+                BinaryOperator::MUL,
+                new Constant(std::log(10.0f)),  // ln(10)
+                u
+            )
+        );
+    }
+
+    case UnaryOperator::EXP: {
+        // (e^u)' = u'e^u
+        return new BinaryOperation(BinaryOperator::MUL, du, u);
+    }
+
+    case UnaryOperator::SQRT: {
+        // (sqrt(u))' = u' / 2sqrt(u)
+        return new BinaryOperation(
+            BinaryOperator::DIV,
+            du,
+            new BinaryOperation(                            // 2sqrt(u)
+                BinaryOperator::MUL,
+                new Constant(2.0f),                         // 2
+                new UnaryOperation(UnaryOperator::SQRT, u)  // sqrt(u)
+            )
+        );
+    }
+
+    case UnaryOperator::ABS: {
+        // (|x|)' = u' * |u| / u
+        return new BinaryOperation(
+            BinaryOperator::MUL,
+            du,
+            new BinaryOperation(                                     // |u| / u
+                BinaryOperator::DIV,
+                new UnaryOperation(UnaryOperator::ABS, u->clone()),  // |u|
+                u                                                    // u
+            )
+        );
+    }
+    }
+
+    // Should not be reached
+    return new Constant(0.0f);
 }
 
 // --------------------------

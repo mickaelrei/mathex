@@ -23,6 +23,15 @@ Expression* Variable::clone() const {
     return new Variable(*this);
 }
 
+Expression* Variable::differentiate(const std::string& varName) const {
+    // If this is the variable being differentiated with respect to, derivative is 1; else 0
+    if (varName == name) {
+        return new Constant(1.0f);
+    } else {
+        return new Constant(0.0f);
+    }
+}
+
 // --------------------------
 // --------------------------
 // Variable and Constant

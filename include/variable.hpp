@@ -13,7 +13,8 @@ public:
     Variable(const std::string& name);
 
     virtual float eval(const VariableContext& ctx) const override;
-    Expression* clone() const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
 
     // Variable and Constant
     BinaryOperation operator+(const Constant& c) const;
@@ -46,7 +47,7 @@ public:
     BinaryOperation operator*(float f) const;
     BinaryOperation operator/(float f) const;
 
-private:
+protected:
     std::string name;
 };
 
