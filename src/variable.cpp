@@ -2,6 +2,7 @@
 
 #include "variable.hpp"
 #include "constant.hpp"
+#include "unary_operation.hpp"
 #include "binary_operation.hpp"
 
 namespace mathex {
@@ -25,44 +26,40 @@ Expression* Variable::clone() const {
 // --------------------------
 // --------------------------
 // Variable and Constant
-BinaryOperation Variable::operator+(const Constant& v) const {
+BinaryOperation Variable::operator+(const Constant& c) const {
     return BinaryOperation(
         BinaryOperator::ADD,
         new Variable(*this),
-        new Constant(v)
+        new Constant(c)
     );
 }
 
-BinaryOperation Variable::operator-(const Constant& v) const {
+BinaryOperation Variable::operator-(const Constant& c) const {
     return BinaryOperation(
         BinaryOperator::SUB,
         new Variable(*this),
-        new Constant(v)
+        new Constant(c)
     );
 }
 
-BinaryOperation Variable::operator*(const Constant& v) const {
+BinaryOperation Variable::operator*(const Constant& c) const {
     return BinaryOperation(
         BinaryOperator::MUL,
         new Variable(*this),
-        new Constant(v)
+        new Constant(c)
     );
 }
 
-BinaryOperation Variable::operator/(const Constant& v) const {
+BinaryOperation Variable::operator/(const Constant& c) const {
     return BinaryOperation(
         BinaryOperator::DIV,
         new Variable(*this),
-        new Constant(v)
+        new Constant(c)
     );
 }
 
-BinaryOperation Variable::operator-() const {
-    return BinaryOperation(
-        BinaryOperator::MUL,
-        new Constant(-1.0f),
-        new Variable(*this)
-    );
+UnaryOperation Variable::operator-() const {
+    return UnaryOperation(UnaryOperator::NEG, new Variable(*this));
 }
 
 // --------------------------
@@ -102,36 +99,71 @@ BinaryOperation Variable::operator/(const Variable& v) const {
 
 // --------------------------
 // --------------------------
-// Variable and BinaryOperation
-BinaryOperation Variable::operator+(const BinaryOperation& v) const {
+// Variable and UnaryOperation
+BinaryOperation Variable::operator+(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::ADD,
         new Variable(*this),
-        new BinaryOperation(v)
+        new UnaryOperation(o)
     );
 }
 
-BinaryOperation Variable::operator-(const BinaryOperation& v) const {
+BinaryOperation Variable::operator-(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::SUB,
         new Variable(*this),
-        new BinaryOperation(v)
+        new UnaryOperation(o)
     );
 }
 
-BinaryOperation Variable::operator*(const BinaryOperation& v) const {
+BinaryOperation Variable::operator*(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::MUL,
         new Variable(*this),
-        new BinaryOperation(v)
+        new UnaryOperation(o)
     );
 }
 
-BinaryOperation Variable::operator/(const BinaryOperation& v) const {
+BinaryOperation Variable::operator/(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::DIV,
         new Variable(*this),
-        new BinaryOperation(v)
+        new UnaryOperation(o)
+    );
+}
+
+// --------------------------
+// --------------------------
+// Variable and BinaryOperation
+BinaryOperation Variable::operator+(const BinaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::ADD,
+        new Variable(*this),
+        new BinaryOperation(o)
+    );
+}
+
+BinaryOperation Variable::operator-(const BinaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::SUB,
+        new Variable(*this),
+        new BinaryOperation(o)
+    );
+}
+
+BinaryOperation Variable::operator*(const BinaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::MUL,
+        new Variable(*this),
+        new BinaryOperation(o)
+    );
+}
+
+BinaryOperation Variable::operator/(const BinaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::DIV,
+        new Variable(*this),
+        new BinaryOperation(o)
     );
 }
 
@@ -173,9 +205,9 @@ BinaryOperation Variable::operator/(float f) const {
 // --------------------------
 // --------------------------
 // float and Variable
-BinaryOperation operator+(float f, const Variable& c) { return c + f; }
-BinaryOperation operator-(float f, const Variable& c) { return c - f; }
-BinaryOperation operator*(float f, const Variable& c) { return c * f; }
-BinaryOperation operator/(float f, const Variable& c) { return c / f; }
+BinaryOperation operator+(float f, const Variable& v) { return v + f; }
+BinaryOperation operator-(float f, const Variable& v) { return v - f; }
+BinaryOperation operator*(float f, const Variable& v) { return v * f; }
+BinaryOperation operator/(float f, const Variable& v) { return v / f; }
 
 } // namespace mathex

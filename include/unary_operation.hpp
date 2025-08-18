@@ -1,59 +1,77 @@
 #pragma once
 
+#include <cmath>
 #include "expression.hpp"
 
 namespace mathex {
 
 class Constant;
-class UnaryOperation;
+class Variable;
 class BinaryOperation;
 
-class Variable : public Expression {
+enum class UnaryOperator {
+    NEG,
+    SIN,
+    COS,
+    TAN,
+    LN,
+    LOG10,
+    EXP,
+    SQRT,
+    ABS
+};
+
+class UnaryOperation : public Expression {
 public:
-    Variable(const std::string& name);
+    UnaryOperation(UnaryOperator op, Expression* operand);
+    UnaryOperation(const UnaryOperation& other);
+    UnaryOperation& operator=(const UnaryOperation& other);
+
+    virtual ~UnaryOperation();
 
     virtual float eval(const VariableContext& ctx) const override;
-    Expression* clone() const override;
-
-    // Variable and Constant
+    virtual Expression* clone() const override;
+    
+    // UnaryOperation and Constant
     BinaryOperation operator+(const Constant& c) const;
     BinaryOperation operator-(const Constant& c) const;
     BinaryOperation operator*(const Constant& c) const;
     BinaryOperation operator/(const Constant& c) const;
     UnaryOperation operator-() const;
 
-    // Variable and Variable
+    // UnaryOperation and Variable
     BinaryOperation operator+(const Variable& v) const;
     BinaryOperation operator-(const Variable& v) const;
     BinaryOperation operator*(const Variable& v) const;
     BinaryOperation operator/(const Variable& v) const;
 
-    // Variable and UnaryOperation
+    // UnaryOperation and UnaryOperation
     BinaryOperation operator+(const UnaryOperation& o) const;
     BinaryOperation operator-(const UnaryOperation& o) const;
     BinaryOperation operator*(const UnaryOperation& o) const;
     BinaryOperation operator/(const UnaryOperation& o) const;
 
-    // Variable and BinaryOperation
+    // UnaryOperation and BinaryOperation
     BinaryOperation operator+(const BinaryOperation& o) const;
     BinaryOperation operator-(const BinaryOperation& o) const;
     BinaryOperation operator*(const BinaryOperation& o) const;
     BinaryOperation operator/(const BinaryOperation& o) const;
 
-    // Variable and float
+    // UnaryOperation and float
     BinaryOperation operator+(float f) const;
     BinaryOperation operator-(float f) const;
     BinaryOperation operator*(float f) const;
     BinaryOperation operator/(float f) const;
 
 private:
-    std::string name;
+    UnaryOperator op;
+    Expression* operand;
 };
 
-// float and Variable
-BinaryOperation operator+(float f, const Variable& v);
-BinaryOperation operator-(float f, const Variable& v);
-BinaryOperation operator*(float f, const Variable& v);
-BinaryOperation operator/(float f, const Variable& v);
+// float and UnaryOperation
+BinaryOperation operator+(float f, const UnaryOperation& o);
+BinaryOperation operator-(float f, const UnaryOperation& o);
+BinaryOperation operator*(float f, const UnaryOperation& o);
+BinaryOperation operator/(float f, const UnaryOperation& o);
 
 } // namespace mathex

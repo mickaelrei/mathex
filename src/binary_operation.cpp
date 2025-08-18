@@ -1,8 +1,10 @@
+#include <stdexcept>
 #include <cmath>
 
 #include "binary_operation.hpp"
 #include "variable.hpp"
 #include "constant.hpp"
+#include "unary_operation.hpp"
 
 namespace mathex {
 
@@ -36,15 +38,15 @@ BinaryOperation::BinaryOperation(
     left{left},
     right{right} {}
 
-BinaryOperation::BinaryOperation(const BinaryOperation& b)
-  : op{b.op},
-    left{b.left ? b.left->clone() : nullptr},
-    right{b.right ? b.right->clone() : nullptr} {
+BinaryOperation::BinaryOperation(const BinaryOperation& o)
+  : op{o.op},
+    left{o.left ? o.left->clone() : nullptr},
+    right{o.right ? o.right->clone() : nullptr} {
 }
 
-BinaryOperation& BinaryOperation::operator=(const BinaryOperation& b) {
+BinaryOperation& BinaryOperation::operator=(const BinaryOperation& o) {
     // Self-assignment
-    if (this == &b) {
+    if (this == &o) {
         return *this;
     }
 
@@ -52,9 +54,9 @@ BinaryOperation& BinaryOperation::operator=(const BinaryOperation& b) {
     delete left;
     delete right;
 
-    op = b.op;
-    left = b.left ? b.left->clone() : nullptr;
-    right = b.right ? b.right->clone() : nullptr;
+    op = o.op;
+    left = o.left ? o.left->clone() : nullptr;
+    right = o.right ? o.right->clone() : nullptr;
     return *this;
 }
 
@@ -81,7 +83,7 @@ float BinaryOperation::eval(const VariableContext& ctx) const {
     }
 
     // Should never reach this
-    return 0.0f;
+    throw std::runtime_error{"[BinaryOperator::eval] Unknown operation"};
 }
 
 Expression* BinaryOperation::clone() const {
@@ -123,12 +125,8 @@ BinaryOperation BinaryOperation::operator/(const Constant& c) const {
     );
 }
 
-BinaryOperation BinaryOperation::operator-() const {
-    return BinaryOperation(
-        BinaryOperator::MUL,
-        new Constant(-1.0f),
-        new BinaryOperation(*this)
-    );
+UnaryOperation BinaryOperation::operator-() const {
+    return UnaryOperation(UnaryOperator::NEG, new BinaryOperation(*this));
 }
 
 // --------------------------
@@ -163,6 +161,41 @@ BinaryOperation BinaryOperation::operator/(const Variable& v) const {
         BinaryOperator::DIV,
         new BinaryOperation(*this),
         new Variable(v)
+    );
+}
+
+// --------------------------
+// --------------------------
+// BinaryOperation and UnaryOperation
+BinaryOperation BinaryOperation::operator+(const UnaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::ADD,
+        new BinaryOperation(*this),
+        new UnaryOperation(o)
+    );
+}
+
+BinaryOperation BinaryOperation::operator-(const UnaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::SUB,
+        new BinaryOperation(*this),
+        new UnaryOperation(o)
+    );
+}
+
+BinaryOperation BinaryOperation::operator*(const UnaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::MUL,
+        new BinaryOperation(*this),
+        new UnaryOperation(o)
+    );
+}
+
+BinaryOperation BinaryOperation::operator/(const UnaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::DIV,
+        new BinaryOperation(*this),
+        new UnaryOperation(o)
     );
 }
 

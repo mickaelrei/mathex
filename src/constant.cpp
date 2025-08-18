@@ -1,6 +1,7 @@
 #include "constant.hpp"
 #include "variable.hpp"
 #include "binary_operation.hpp"
+#include "unary_operation.hpp"
 
 namespace mathex {
 
@@ -18,20 +19,20 @@ Expression* Constant::clone() const {
 // --------------------------
 // --------------------------
 // Constant and Constant
-Constant Constant::operator+(const Constant& v) const {
-    return Constant(c + v.c);
+Constant Constant::operator+(const Constant& _c) const {
+    return Constant(c + _c.c);
 }
 
-Constant Constant::operator-(const Constant& v) const {
-    return Constant(c - v.c);
+Constant Constant::operator-(const Constant& _c) const {
+    return Constant(c - _c.c);
 }
 
-Constant Constant::operator*(const Constant& v) const {
-    return Constant(c * v.c);
+Constant Constant::operator*(const Constant& _c) const {
+    return Constant(c * _c.c);
 }
 
-Constant Constant::operator/(const Constant& v) const {
-    return Constant(c / v.c);
+Constant Constant::operator/(const Constant& _c) const {
+    return Constant(c / _c.c);
 }
 
 Constant Constant::operator-() const {
@@ -76,36 +77,71 @@ BinaryOperation Constant::operator/(const Variable& v) const {
 
 // --------------------------
 // --------------------------
-// Constant and BinaryOperation
-BinaryOperation Constant::operator+(const BinaryOperation& v) const {
+// Constant and UnaryOperation
+BinaryOperation Constant::operator+(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::ADD,
         new Constant(*this),
-        new BinaryOperation(v)
+        new UnaryOperation(o)
     );
 }
 
-BinaryOperation Constant::operator-(const BinaryOperation& v) const {
+BinaryOperation Constant::operator-(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::SUB,
         new Constant(*this),
-        new BinaryOperation(v)
+        new UnaryOperation(o)
     );
 }
 
-BinaryOperation Constant::operator*(const BinaryOperation& v) const {
+BinaryOperation Constant::operator*(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::MUL,
         new Constant(*this),
-        new BinaryOperation(v)
+        new UnaryOperation(o)
     );
 }
 
-BinaryOperation Constant::operator/(const BinaryOperation& v) const {
+BinaryOperation Constant::operator/(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::DIV,
         new Constant(*this),
-        new BinaryOperation(v)
+        new UnaryOperation(o)
+    );
+}
+
+// --------------------------
+// --------------------------
+// Constant and BinaryOperation
+BinaryOperation Constant::operator+(const BinaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::ADD,
+        new Constant(*this),
+        new BinaryOperation(o)
+    );
+}
+
+BinaryOperation Constant::operator-(const BinaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::SUB,
+        new Constant(*this),
+        new BinaryOperation(o)
+    );
+}
+
+BinaryOperation Constant::operator*(const BinaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::MUL,
+        new Constant(*this),
+        new BinaryOperation(o)
+    );
+}
+
+BinaryOperation Constant::operator/(const BinaryOperation& o) const {
+    return BinaryOperation(
+        BinaryOperator::DIV,
+        new Constant(*this),
+        new BinaryOperation(o)
     );
 }
 

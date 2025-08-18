@@ -14,14 +14,14 @@ $(BIN)/constant.o: $(INCLUDE)/constant.hpp $(SRC)/constant.cpp
 $(BIN)/variable.o: $(INCLUDE)/variable.hpp $(SRC)/variable.cpp
 	$(CXX) -c $(SRC)/variable.cpp -o $(BIN)/variable.o $(FLAGS) -I$(INCLUDE)
 
+$(BIN)/unary_operation.o: $(INCLUDE)/unary_operation.hpp $(SRC)/unary_operation.cpp
+	$(CXX) -c $(SRC)/unary_operation.cpp -o $(BIN)/unary_operation.o $(FLAGS) -I$(INCLUDE)
+
 $(BIN)/binary_operation.o: $(INCLUDE)/binary_operation.hpp $(SRC)/binary_operation.cpp
 	$(CXX) -c $(SRC)/binary_operation.cpp -o $(BIN)/binary_operation.o $(FLAGS) -I$(INCLUDE)
 
-$(BIN)/pow.o: $(INCLUDE)/pow.hpp $(SRC)/pow.cpp
-	$(CXX) -c $(SRC)/pow.cpp -o $(BIN)/pow.o $(FLAGS) -I$(INCLUDE)
-
-$(BIN)/main: $(BIN)/constant.o $(BIN)/variable.o $(BIN)/binary_operation.o $(BIN)/pow.o main.cpp
-	$(CXX) main.cpp $(BIN)/constant.o $(BIN)/variable.o $(BIN)/binary_operation.o $(BIN)/pow.o -o $(BIN)/main $(FLAGS) -I$(INCLUDE)
+$(BIN)/main: $(BIN)/constant.o $(BIN)/variable.o $(BIN)/unary_operation.o $(BIN)/binary_operation.o main.cpp
+	$(CXX) main.cpp $(BIN)/constant.o $(BIN)/variable.o $(BIN)/unary_operation.o $(BIN)/binary_operation.o -o $(BIN)/main $(FLAGS) -I$(INCLUDE)
 
 clean:
 	@if [ -d $(BIN) ]; then rm -rf $(BIN); fi

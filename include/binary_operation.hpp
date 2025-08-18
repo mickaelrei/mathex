@@ -8,6 +8,7 @@ namespace mathex {
 
 class Constant;
 class Variable;
+class UnaryOperation;
 
 enum class BinaryOperator {
     ADD,
@@ -24,8 +25,8 @@ std::ostream& operator<<(const std::ostream& os, BinaryOperator op);
 class BinaryOperation : public Expression {
 public:
     BinaryOperation(BinaryOperator operand, Expression* left, Expression* right);
-    BinaryOperation(const BinaryOperation& b);
-    BinaryOperation& operator=(const BinaryOperation& b);
+    BinaryOperation(const BinaryOperation& o);
+    BinaryOperation& operator=(const BinaryOperation& o);
 
     virtual ~BinaryOperation();
 
@@ -37,13 +38,19 @@ public:
     BinaryOperation operator-(const Constant& v) const;
     BinaryOperation operator*(const Constant& v) const;
     BinaryOperation operator/(const Constant& v) const;
-    BinaryOperation operator-() const;
+    UnaryOperation operator-() const;
 
     // BinaryOperation and Variable
     BinaryOperation operator+(const Variable& v) const;
     BinaryOperation operator-(const Variable& v) const;
     BinaryOperation operator*(const Variable& v) const;
     BinaryOperation operator/(const Variable& v) const;
+
+    // BinaryOperation and UnaryOperation
+    BinaryOperation operator+(const UnaryOperation& v) const;
+    BinaryOperation operator-(const UnaryOperation& v) const;
+    BinaryOperation operator*(const UnaryOperation& v) const;
+    BinaryOperation operator/(const UnaryOperation& v) const;
 
     // BinaryOperation and BinaryOperation
     BinaryOperation operator+(const BinaryOperation& v) const;
@@ -57,7 +64,7 @@ public:
     BinaryOperation operator*(float f) const;
     BinaryOperation operator/(float f) const;
 
-// private:
+private:
     BinaryOperator op;
     Expression* left;
     Expression* right;
