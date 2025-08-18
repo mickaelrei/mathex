@@ -2,6 +2,8 @@
 #include "variable.hpp"
 #include "binary_operation.hpp"
 
+namespace mathex {
+
 Constant::Constant(float c) : c{c} {}
 
 float Constant::eval(const VariableContext& ctx) const {
@@ -133,3 +135,5 @@ Constant operator+(float f, const Constant& c) { return c + f; }
 Constant operator-(float f, const Constant& c) { return c - f; }
 Constant operator*(float f, const Constant& c) { return c * f; }
 Constant operator/(float f, const Constant& c) { return c / f; }
+
+} // namespace mathex

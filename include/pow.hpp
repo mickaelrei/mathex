@@ -4,6 +4,8 @@
 #include "constant.hpp"
 #include "variable.hpp"
 
+namespace mathex {
+
 BinaryOperation pow(const Expression& base, const Expression& exp);
 
 BinaryOperation pow(const Expression& base, float exp);
@@ -11,3 +13,5 @@ BinaryOperation pow(const Expression& base, float exp);
 BinaryOperation pow(float base, const Expression& exp);
 
 BinaryOperation pow(float base, float exp);
+
+} // namespace mathex

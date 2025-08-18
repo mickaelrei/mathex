@@ -13,9 +13,9 @@ int main(int argc, char **argv) {
     }
 
     // f = e^x
-    Variable x("x");
-    Constant e(2.718281828);
-    auto f = pow(e, -x);
+    mathex::Variable x("x");
+    mathex::Constant e(2.718281828);
+    auto f = mathex::pow(e, -x);
 
     printf("f(x) = e^(-x) | x=%.3f | f(x) = %.3f\n", val, f.eval({{ "x", val }}));
 

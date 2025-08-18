@@ -1,5 +1,7 @@
 #include "pow.hpp"
 
+namespace mathex {
+
 BinaryOperation pow(const Expression& base, const Expression& exp) {
     return BinaryOperation(
         BinaryOperator::POW,
@@ -19,3 +21,5 @@ BinaryOperation pow(float base, const Expression& exp) {
 BinaryOperation pow(float base, float exp) {
     return pow(Constant(base), Constant(exp));
 }
+
+} // namespace mathex

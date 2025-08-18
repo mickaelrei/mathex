@@ -1,6 +1,6 @@
-# Math Expressions
+# Mathex
 
-Create math expressions directly with C++ operators and evaluate them. Example:
+Mathex is a simple library to create math expressions directly with C++ operators and evaluate them. Example:
 
 ```cpp
 // Create variable and function

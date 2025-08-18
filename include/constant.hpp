@@ -2,6 +2,8 @@
 
 #include "expression.hpp"
 
+namespace mathex {
+
 class Variable;
 class BinaryOperation;
 
@@ -46,3 +48,5 @@ Constant operator+(float f, const Constant& c);
 Constant operator-(float f, const Constant& c);
 Constant operator*(float f, const Constant& c);
 Constant operator/(float f, const Constant& c);
+
+} // namespace mathex

@@ -4,6 +4,8 @@
 #include "variable.hpp"
 #include "constant.hpp"
 
+namespace mathex {
+
 std::string to_string(BinaryOperator op) {
     switch (op) {
     case BinaryOperator::ADD:
@@ -238,3 +240,5 @@ BinaryOperation operator+(float f, const BinaryOperation& c) { return c + f; }
 BinaryOperation operator-(float f, const BinaryOperation& c) { return c - f; }
 BinaryOperation operator*(float f, const BinaryOperation& c) { return c * f; }
 BinaryOperation operator/(float f, const BinaryOperation& c) { return c / f; }
+
+} // namespace mathex

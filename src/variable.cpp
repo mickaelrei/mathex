@@ -4,6 +4,8 @@
 #include "constant.hpp"
 #include "binary_operation.hpp"
 
+namespace mathex {
+
 Variable::Variable(const std::string& name) : name{name} {}
 
 float Variable::eval(const VariableContext& ctx) const {
@@ -175,3 +177,5 @@ BinaryOperation operator+(float f, const Variable& c) { return c + f; }
 BinaryOperation operator-(float f, const Variable& c) { return c - f; }
 BinaryOperation operator*(float f, const Variable& c) { return c * f; }
 BinaryOperation operator/(float f, const Variable& c) { return c / f; }
+
+} // namespace mathex
