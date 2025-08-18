@@ -123,7 +123,7 @@ BinaryOperation BinaryOperation::operator/(const Constant& c) const {
 
 BinaryOperation BinaryOperation::operator-() const {
     return BinaryOperation(
-        BinaryOperator::DIV,
+        BinaryOperator::MUL,
         new Constant(-1.0f),
         new BinaryOperation(*this)
     );

@@ -3,7 +3,7 @@
 #include "constant.hpp"
 #include "variable.hpp"
 #include "binary_operation.hpp"
-#include "power.hpp"
+#include "pow.hpp"
 
 int main(int argc, char **argv) {
     // Get value from arg

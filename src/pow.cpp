@@ -1,4 +1,4 @@
-#include "power.hpp"
+#include "pow.hpp"
 
 BinaryOperation pow(const Expression& base, const Expression& exp) {
     return BinaryOperation(

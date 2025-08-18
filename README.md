@@ -18,4 +18,4 @@ printf("f(8) = %.3f\n", f.eval(ctx)); // f(8) = 0.000
 ## Supported operations
 
 - The 4 basic operations: addition, subtraction, multiplication and division
-- Exponentiation (use the `power()` helper function)
+- Exponentiation (use the `pow()` helper function)

@@ -57,7 +57,7 @@ BinaryOperation Variable::operator/(const Constant& v) const {
 
 BinaryOperation Variable::operator-() const {
     return BinaryOperation(
-        BinaryOperator::DIV,
+        BinaryOperator::MUL,
         new Constant(-1.0f),
         new Variable(*this)
     );
