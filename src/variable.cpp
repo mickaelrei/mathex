@@ -16,6 +16,10 @@ float Variable::eval(const VariableContext& ctx) const {
     return it->second;
 }
 
+Expression* Variable::clone() const {
+    return new Variable(*this);
+}
+
 // --------------------------
 // --------------------------
 // Variable and Constant
@@ -48,6 +52,14 @@ BinaryOperation Variable::operator/(const Constant& v) const {
         BinaryOperator::DIV,
         new Variable(*this),
         new Constant(v)
+    );
+}
+
+BinaryOperation Variable::operator-() const {
+    return BinaryOperation(
+        BinaryOperator::DIV,
+        new Constant(-1.0f),
+        new Variable(*this)
     );
 }
 

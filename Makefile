@@ -17,8 +17,11 @@ $(BIN)/variable.o: $(INCLUDE)/variable.hpp $(SRC)/variable.cpp
 $(BIN)/binary_operation.o: $(INCLUDE)/binary_operation.hpp $(SRC)/binary_operation.cpp
 	$(CXX) -c $(SRC)/binary_operation.cpp -o $(BIN)/binary_operation.o $(FLAGS) -I$(INCLUDE)
 
-$(BIN)/main: $(BIN)/constant.o $(BIN)/variable.o $(BIN)/binary_operation.o main.cpp
-	$(CXX) main.cpp $(BIN)/constant.o $(BIN)/variable.o $(BIN)/binary_operation.o -o $(BIN)/main $(FLAGS) -I$(INCLUDE)
+$(BIN)/power.o: $(INCLUDE)/power.hpp $(SRC)/power.cpp
+	$(CXX) -c $(SRC)/power.cpp -o $(BIN)/power.o $(FLAGS) -I$(INCLUDE)
+
+$(BIN)/main: $(BIN)/constant.o $(BIN)/variable.o $(BIN)/binary_operation.o $(BIN)/power.o main.cpp
+	$(CXX) main.cpp $(BIN)/constant.o $(BIN)/variable.o $(BIN)/binary_operation.o $(BIN)/power.o -o $(BIN)/main $(FLAGS) -I$(INCLUDE)
 
 clean:
 	@if [ -d $(BIN) ]; then rm -rf $(BIN); fi

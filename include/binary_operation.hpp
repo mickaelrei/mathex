@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 
 #include "expression.hpp"
@@ -9,7 +11,8 @@ enum class BinaryOperator {
     ADD,
     SUB,
     MUL,
-    DIV
+    DIV,
+    POW
 };
 
 std::string to_string(BinaryOperator op);
@@ -25,13 +28,14 @@ public:
     virtual ~BinaryOperation();
 
     virtual float eval(const VariableContext& ctx) const override;
-    Expression* clone() const override { return new BinaryOperation(*this); }
+    Expression* clone() const override;
 
     // BinaryOperation and Constant
     BinaryOperation operator+(const Constant& v) const;
     BinaryOperation operator-(const Constant& v) const;
     BinaryOperation operator*(const Constant& v) const;
     BinaryOperation operator/(const Constant& v) const;
+    BinaryOperation operator-() const;
 
     // BinaryOperation and Variable
     BinaryOperation operator+(const Variable& v) const;

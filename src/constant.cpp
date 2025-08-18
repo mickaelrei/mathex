@@ -9,6 +9,10 @@ float Constant::eval(const VariableContext& ctx) const {
     return c;
 }
 
+Expression* Constant::clone() const {
+    return new Constant(*this);
+}
+
 // --------------------------
 // --------------------------
 // Constant and Constant
@@ -27,6 +31,11 @@ Constant Constant::operator*(const Constant& v) const {
 Constant Constant::operator/(const Constant& v) const {
     return Constant(c / v.c);
 }
+
+Constant Constant::operator-() const {
+    return Constant(-c);
+}
+
 
 // --------------------------
 // --------------------------

@@ -10,13 +10,14 @@ public:
     Constant(float c);
 
     virtual float eval(const VariableContext& ctx) const override;
-    Expression* clone() const override { return new Constant(*this); }
+    Expression* clone() const override;
 
     // Constant and Constant
     Constant operator+(const Constant& v) const;
     Constant operator-(const Constant& v) const;
     Constant operator*(const Constant& v) const;
     Constant operator/(const Constant& v) const;
+    Constant operator-() const;
 
     // Constant and Variable
     BinaryOperation operator+(const Variable& v) const;

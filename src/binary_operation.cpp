@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "binary_operation.hpp"
 #include "variable.hpp"
 #include "constant.hpp"
@@ -12,6 +14,8 @@ std::string to_string(BinaryOperator op) {
         return "MUL";
     case BinaryOperator::DIV:
         return "DIV";
+    case BinaryOperator::POW:
+        return "POW";
     }
 
     return "UNKNOWN";
@@ -70,10 +74,16 @@ float BinaryOperation::eval(const VariableContext& ctx) const {
         return l * r;
     case BinaryOperator::DIV:
         return l / r;
+    case BinaryOperator::POW:
+        return std::pow(l, r);
     }
 
     // Should never reach this
     return 0.0f;
+}
+
+Expression* BinaryOperation::clone() const {
+    return new BinaryOperation(*this);
 }
 
 // --------------------------
@@ -108,6 +118,14 @@ BinaryOperation BinaryOperation::operator/(const Constant& c) const {
         BinaryOperator::DIV,
         new BinaryOperation(*this),
         new Constant(c)
+    );
+}
+
+BinaryOperation BinaryOperation::operator-() const {
+    return BinaryOperation(
+        BinaryOperator::DIV,
+        new Constant(-1.0f),
+        new BinaryOperation(*this)
     );
 }
 

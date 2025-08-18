@@ -10,12 +10,14 @@ public:
     Variable(const std::string& name);
 
     virtual float eval(const VariableContext& ctx) const override;
-    Expression* clone() const override { return new Variable(*this); }
+    Expression* clone() const override;
+
     // Variable and Constant
     BinaryOperation operator+(const Constant& v) const;
     BinaryOperation operator-(const Constant& v) const;
     BinaryOperation operator*(const Constant& v) const;
     BinaryOperation operator/(const Constant& v) const;
+    BinaryOperation operator-() const;
 
     // Variable and Variable
     BinaryOperation operator+(const Variable& v) const;
