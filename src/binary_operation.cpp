@@ -5,6 +5,7 @@
 #include "variable.hpp"
 #include "constant.hpp"
 #include "unary_operation.hpp"
+#include "functions.hpp"
 
 namespace mathex {
 
@@ -166,7 +167,7 @@ Expression* BinaryOperation::differentiate(const std::string& varName) const {
                 new BinaryOperation(                                   // v'ln(u)
                     BinaryOperator::MUL,
                     dv,
-                    new UnaryOperation(UnaryOperator::LN, u->clone())  // ln(u)
+                    new OperationLn(u->clone())                        // ln(u)
                 ),
                 new BinaryOperation(                                   // vu'/u
                     BinaryOperator::MUL,
@@ -217,8 +218,8 @@ BinaryOperation BinaryOperation::operator/(const Constant& c) const {
     );
 }
 
-UnaryOperation BinaryOperation::operator-() const {
-    return UnaryOperation(UnaryOperator::NEG, new BinaryOperation(*this));
+OperationNeg BinaryOperation::operator-() const {
+    return OperationNeg(clone());
 }
 
 // --------------------------
@@ -263,7 +264,7 @@ BinaryOperation BinaryOperation::operator+(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::ADD,
         new BinaryOperation(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -271,7 +272,7 @@ BinaryOperation BinaryOperation::operator-(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::SUB,
         new BinaryOperation(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -279,7 +280,7 @@ BinaryOperation BinaryOperation::operator*(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::MUL,
         new BinaryOperation(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -287,7 +288,7 @@ BinaryOperation BinaryOperation::operator/(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::DIV,
         new BinaryOperation(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 

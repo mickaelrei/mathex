@@ -88,7 +88,7 @@ BinaryOperation Constant::operator+(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::ADD,
         new Constant(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -96,7 +96,7 @@ BinaryOperation Constant::operator-(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::SUB,
         new Constant(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -104,7 +104,7 @@ BinaryOperation Constant::operator*(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::MUL,
         new Constant(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -112,7 +112,7 @@ BinaryOperation Constant::operator/(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::DIV,
         new Constant(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 

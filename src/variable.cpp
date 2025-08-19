@@ -4,6 +4,7 @@
 #include "constant.hpp"
 #include "unary_operation.hpp"
 #include "binary_operation.hpp"
+#include "functions.hpp"
 
 namespace mathex {
 
@@ -67,8 +68,8 @@ BinaryOperation Variable::operator/(const Constant& c) const {
     );
 }
 
-UnaryOperation Variable::operator-() const {
-    return UnaryOperation(UnaryOperator::NEG, new Variable(*this));
+OperationNeg Variable::operator-() const {
+    return OperationNeg(clone());
 }
 
 // --------------------------
@@ -113,7 +114,7 @@ BinaryOperation Variable::operator+(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::ADD,
         new Variable(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -121,7 +122,7 @@ BinaryOperation Variable::operator-(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::SUB,
         new Variable(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -129,7 +130,7 @@ BinaryOperation Variable::operator*(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::MUL,
         new Variable(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 
@@ -137,7 +138,7 @@ BinaryOperation Variable::operator/(const UnaryOperation& o) const {
     return BinaryOperation(
         BinaryOperator::DIV,
         new Variable(*this),
-        new UnaryOperation(o)
+        o.clone()
     );
 }
 

@@ -9,6 +9,7 @@ namespace mathex {
 class Constant;
 class Variable;
 class UnaryOperation;
+class OperationNeg;
 
 enum class BinaryOperator {
     ADD,
@@ -39,7 +40,7 @@ public:
     BinaryOperation operator-(const Constant& v) const;
     BinaryOperation operator*(const Constant& v) const;
     BinaryOperation operator/(const Constant& v) const;
-    UnaryOperation operator-() const;
+    OperationNeg operator-() const;
 
     // BinaryOperation and Variable
     BinaryOperation operator+(const Variable& v) const;

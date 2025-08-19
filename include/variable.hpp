@@ -7,6 +7,7 @@ namespace mathex {
 class Constant;
 class UnaryOperation;
 class BinaryOperation;
+class OperationNeg;
 
 class Variable : public Expression {
 public:
@@ -21,7 +22,7 @@ public:
     BinaryOperation operator-(const Constant& c) const;
     BinaryOperation operator*(const Constant& c) const;
     BinaryOperation operator/(const Constant& c) const;
-    UnaryOperation operator-() const;
+    OperationNeg operator-() const;
 
     // Variable and Variable
     BinaryOperation operator+(const Variable& v) const;

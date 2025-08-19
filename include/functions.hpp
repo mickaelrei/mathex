@@ -6,48 +6,157 @@
 
 namespace mathex {
 
-inline UnaryOperation sin(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::SIN, expr.clone());
+class OperationNeg : public UnaryOperation {
+public:
+    OperationNeg(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationSin : public UnaryOperation {
+public:
+    OperationSin(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationCos : public UnaryOperation {
+public:
+    OperationCos(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationTan : public UnaryOperation {
+public:
+    OperationTan(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationCsc : public UnaryOperation {
+public:
+    OperationCsc(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationSec : public UnaryOperation {
+public:
+    OperationSec(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationCot : public UnaryOperation {
+public:
+    OperationCot(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationLn : public UnaryOperation {
+public:
+    OperationLn(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationLog10 : public UnaryOperation {
+public:
+    OperationLog10(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationExp : public UnaryOperation {
+public:
+    OperationExp(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationSqrt : public UnaryOperation {
+public:
+    OperationSqrt(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+class OperationAbs : public UnaryOperation {
+public:
+    OperationAbs(Expression* operand) : UnaryOperation{operand} {}
+
+    virtual float eval(const VariableContext& ctx) const override;
+    virtual Expression* clone() const override;
+    virtual Expression* differentiate(const std::string& varName) const override;
+};
+
+
+inline OperationSin sin(const Expression& expr) {
+    return OperationSin(expr.clone());
 }
 
-inline UnaryOperation cos(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::COS, expr.clone());
+inline OperationCos cos(const Expression& expr) {
+    return OperationCos(expr.clone());
 }
 
-inline UnaryOperation tan(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::TAN, expr.clone());
+inline OperationTan tan(const Expression& expr) {
+    return OperationTan(expr.clone());
 }
 
-inline UnaryOperation csc(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::CSC, expr.clone());
+inline OperationCsc csc(const Expression& expr) {
+    return OperationCsc(expr.clone());
 }
 
-inline UnaryOperation sec(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::SEC, expr.clone());
+inline OperationSec sec(const Expression& expr) {
+    return OperationSec(expr.clone());
 }
 
-inline UnaryOperation cot(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::COT, expr.clone());
+inline OperationCot cot(const Expression& expr) {
+    return OperationCot(expr.clone());
 }
 
-inline UnaryOperation ln(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::LN, expr.clone());
+inline OperationLn ln(const Expression& expr) {
+    return OperationLn(expr.clone());
 }
 
-inline UnaryOperation log10(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::LOG10, expr.clone());
+inline OperationLog10 log10(const Expression& expr) {
+    return OperationLog10(expr.clone());
 }
 
-inline UnaryOperation exp(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::EXP, expr.clone());
+inline OperationExp exp(const Expression& expr) {
+    return OperationExp(expr.clone());
 }
 
-inline UnaryOperation sqrt(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::SQRT, expr.clone());
+inline OperationSqrt sqrt(const Expression& expr) {
+    return OperationSqrt(expr.clone());
 }
 
-inline UnaryOperation abs(const Expression& expr) {
-    return UnaryOperation(UnaryOperator::ABS, expr.clone());
+inline OperationAbs abs(const Expression& expr) {
+    return OperationAbs(expr.clone());
 }
 
 inline BinaryOperation pow(const Expression& base, const Expression& exp) {
